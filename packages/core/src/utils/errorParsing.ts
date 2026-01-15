@@ -11,8 +11,8 @@ import { AuthType } from '../core/contentGenerator.js';
 
 const RATE_LIMIT_ERROR_MESSAGE_USE_GEMINI =
   '\nPlease wait and try again later. To increase your limits, request a quota increase through AI Studio, or switch to another /auth method';
-const RATE_LIMIT_ERROR_MESSAGE_MISTRAL =
-  '\nPlease wait and try again later. To increase your limits, request a quota increase through Mistral, or switch to another /auth method';
+const RATE_LIMIT_ERROR_MESSAGE_VERTEX =
+  '\nPlease wait and try again later. To increase your limits, request a quota increase through Vertex, or switch to another /auth method';
 const getRateLimitErrorMessageDefault = (
   fallbackModel: string = DEFAULT_GEMINI_FLASH_MODEL,
 ) =>
@@ -25,8 +25,8 @@ function getRateLimitMessage(
   switch (authType) {
     case AuthType.USE_GEMINI:
       return RATE_LIMIT_ERROR_MESSAGE_USE_GEMINI;
-    case AuthType.USE_MISTRAL:
-      return RATE_LIMIT_ERROR_MESSAGE_MISTRAL;
+    case AuthType.USE_VERTEX_AI:
+      return RATE_LIMIT_ERROR_MESSAGE_VERTEX;
     default:
       return getRateLimitErrorMessageDefault(fallbackModel);
   }

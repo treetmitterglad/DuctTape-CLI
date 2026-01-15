@@ -849,8 +849,8 @@ export class Config {
     // Vertex and Genai have incompatible encryption and sending history with
     // thoughtSignature from Genai to Vertex will fail, we need to strip them
     if (
-      this.contentGeneratorConfig?.authType === AuthType.USE_MISTRAL &&
-      authMethod !== AuthType.USE_MISTRAL
+      this.contentGeneratorConfig?.authType === AuthType.USE_GEMINI &&
+      authMethod !== AuthType.USE_GEMINI
     ) {
       // Restore the conversation history to the new client
       this.geminiClient.stripThoughtsFromHistory();
@@ -898,7 +898,8 @@ export class Config {
 
     const authType = this.contentGeneratorConfig.authType;
     if (
-      authType === AuthType.USE_MISTRAL
+      authType === AuthType.USE_GEMINI ||
+      authType === AuthType.USE_VERTEX_AI
     ) {
       this.setHasAccessToPreviewModel(true);
     }
@@ -1269,7 +1270,7 @@ export class Config {
     return this.experimentalJitContext;
   }
 
-  getDuctTapeMdFileCount(): number {
+  getGeminiMdFileCount(): number {
     if (this.experimentalJitContext && this.contextManager) {
       return this.contextManager.getLoadedPaths().size;
     }

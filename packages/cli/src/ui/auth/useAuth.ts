@@ -28,7 +28,7 @@ export function validateAuthMethodWithSettings(
     return null;
   }
   // If using Gemini API key, we don't validate it here as we might need to prompt for it.
-  if (authType === AuthType.USE_MISTRAL) {
+  if (authType === AuthType.USE_GEMINI) {
     return null;
   }
   return validateAuthMethod(authType);
@@ -55,7 +55,7 @@ export const useAuthCommand = (settings: LoadedSettings, config: Config) => {
   );
 
   const reloadApiKey = useCallback(async () => {
-    const envKey = process.env['MISTRAL_API_KEY'];
+    const envKey = process.env['GEMINI_API_KEY'];
     if (envKey !== undefined) {
       setApiKeyDefaultValue(envKey);
       return envKey;
@@ -82,9 +82,9 @@ export const useAuthCommand = (settings: LoadedSettings, config: Config) => {
 
       const authType = settings.merged.security.auth.selectedType;
       if (!authType) {
-        if (process.env['MISTRAL_API_KEY']) {
+        if (process.env['GEMINI_API_KEY']) {
           onAuthError(
-            'Existing API key detected (MISTRAL_API_KEY). Select "Mistral API Key" option to use it.',
+            'Existing API key detected (GEMINI_API_KEY). Select "Gemini API Key" option to use it.',
           );
         } else {
           onAuthError('No authentication method selected.');
@@ -92,7 +92,7 @@ export const useAuthCommand = (settings: LoadedSettings, config: Config) => {
         return;
       }
 
-      if (authType === AuthType.USE_MISTRAL) {
+      if (authType === AuthType.USE_GEMINI) {
         const key = await reloadApiKey(); // Use the unified function
         if (!key) {
           setAuthState(AuthState.AwaitingApiKeyInput);

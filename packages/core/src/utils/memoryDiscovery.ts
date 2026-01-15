@@ -365,7 +365,7 @@ export async function loadGlobalMemory(
 }
 
 /**
- * Traverses upward from startDir to stopDir, finding all DUCTTAPE.md variants.
+ * Traverses upward from startDir to stopDir, finding all GEMINI.md variants.
  *
  * Files are ordered by directory level (root to leaf), with all filename
  * variants grouped together per directory.
@@ -468,7 +468,7 @@ export interface LoadServerHierarchicalMemoryResponse {
 }
 
 /**
- * Loads hierarchical DUCTTAPE.md files and concatenates their content.
+ * Loads hierarchical GEMINI.md files and concatenates their content.
  * This function is intended for use by the server.
  */
 export async function loadServerHierarchicalMemory(

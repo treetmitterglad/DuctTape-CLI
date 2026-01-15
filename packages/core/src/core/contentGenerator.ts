@@ -12,7 +12,7 @@ import type {
   EmbedContentResponse,
   EmbedContentParameters,
 } from '@google/genai';
-// import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI } from '@google/genai';
 import { createCodeAssistContentGenerator } from '../code_assist/codeAssist.js';
 import type { Config } from '../config/config.js';
 import { loadApiKey } from './apiKeyCredentialStorage.js';
@@ -48,14 +48,15 @@ export interface ContentGenerator {
 
 export enum AuthType {
   LOGIN_WITH_GOOGLE = 'oauth-personal',
-  USE_MISTRAL = 'mistral-api-key',
+  USE_GEMINI = 'gemini-api-key',
+  USE_VERTEX_AI = 'vertex-ai',
   LEGACY_CLOUD_SHELL = 'cloud-shell',
   COMPUTE_ADC = 'compute-default-credentials',
 }
 
 export type ContentGeneratorConfig = {
   apiKey?: string;
-  mistral?: boolean;
+  vertexai?: boolean;
   authType?: AuthType;
   proxy?: string;
 };
@@ -64,8 +65,14 @@ export async function createContentGeneratorConfig(
   config: Config,
   authType: AuthType | undefined,
 ): Promise<ContentGeneratorConfig> {
-  const mistralApiKey =
-    process.env['MISTRAL_API_KEY'] || (await loadApiKey()) || undefined;
+  const geminiApiKey =
+    process.env['GEMINI_API_KEY'] || (await loadApiKey()) || undefined;
+  const googleApiKey = process.env['GOOGLE_API_KEY'] || undefined;
+  const googleCloudProject =
+    process.env['GOOGLE_CLOUD_PROJECT'] ||
+    process.env['GOOGLE_CLOUD_PROJECT_ID'] ||
+    undefined;
+  const googleCloudLocation = process.env['GOOGLE_CLOUD_LOCATION'] || undefined;
 
   const contentGeneratorConfig: ContentGeneratorConfig = {
     authType,
@@ -80,9 +87,19 @@ export async function createContentGeneratorConfig(
     return contentGeneratorConfig;
   }
 
-  if (authType === AuthType.USE_MISTRAL && mistralApiKey) {
-    contentGeneratorConfig.apiKey = mistralApiKey;
-    contentGeneratorConfig.mistral = true;
+  if (authType === AuthType.USE_GEMINI && geminiApiKey) {
+    contentGeneratorConfig.apiKey = geminiApiKey;
+    contentGeneratorConfig.vertexai = false;
+
+    return contentGeneratorConfig;
+  }
+
+  if (
+    authType === AuthType.USE_VERTEX_AI &&
+    (googleApiKey || (googleCloudProject && googleCloudLocation))
+  ) {
+    contentGeneratorConfig.apiKey = googleApiKey;
+    contentGeneratorConfig.vertexai = true;
 
     return contentGeneratorConfig;
   }
@@ -108,11 +125,11 @@ export async function createContentGenerator(
       gcConfig.getPreviewFeatures(),
     );
     const customHeadersEnv =
-      process.env['DUCTTAPE_CLI_CUSTOM_HEADERS'] || undefined;
-    const userAgent = `DuctTapeCLI/${version}/${model} (${process.platform}; ${process.arch})`;
+      process.env['GEMINI_CLI_CUSTOM_HEADERS'] || undefined;
+    const userAgent = `GeminiCLI/${version}/${model} (${process.platform}; ${process.arch})`;
     const customHeadersMap = parseCustomHeaders(customHeadersEnv);
     const apiKeyAuthMechanism =
-      process.env['DUCTTAPE_API_KEY_AUTH_MECHANISM'] || 'authorization';
+      process.env['GEMINI_API_KEY_AUTH_MECHANISM'] || 'x-goog-api-key';
 
     const baseHeaders: Record<string, string> = {
       ...customHeadersMap,
@@ -121,7 +138,8 @@ export async function createContentGenerator(
 
     if (
       apiKeyAuthMechanism === 'bearer' &&
-      config.authType === AuthType.USE_MISTRAL &&
+      (config.authType === AuthType.USE_GEMINI ||
+        config.authType === AuthType.USE_VERTEX_AI) &&
       config.apiKey
     ) {
       baseHeaders['Authorization'] = `Bearer ${config.apiKey}`;
@@ -142,33 +160,27 @@ export async function createContentGenerator(
       );
     }
 
-    if (config.authType === AuthType.USE_MISTRAL) {
+    if (
+      config.authType === AuthType.USE_GEMINI ||
+      config.authType === AuthType.USE_VERTEX_AI
+    ) {
       let headers: Record<string, string> = { ...baseHeaders };
       if (gcConfig?.getUsageStatisticsEnabled()) {
         const installationManager = new InstallationManager();
         const installationId = installationManager.getInstallationId();
         headers = {
           ...headers,
-          'x-ducttape-api-user-id': `${installationId}`,
+          'x-gemini-api-privileged-user-id': `${installationId}`,
         };
       }
       const httpOptions = { headers };
 
-      // TODO: Implement Mistral API client integration
-      // const mistralClient = new MistralClient({
-      //   apiKey: config.apiKey === '' ? undefined : config.apiKey,
-      //   httpOptions,
-      // });
-      // return new LoggingContentGenerator(mistralClient.models, gcConfig);
-      
-      // Import the Mistral client
-      const { MistralClient } = await import('../mistral/mistralClient.js');
-      
-      const mistralClient = new MistralClient(
-        config.apiKey === '' ? 'placeholder-api-key' : config.apiKey,
+      const googleGenAI = new GoogleGenAI({
+        apiKey: config.apiKey === '' ? undefined : config.apiKey,
+        vertexai: config.vertexai,
         httpOptions,
-      );
-      return new LoggingContentGenerator(mistralClient, gcConfig);
+      });
+      return new LoggingContentGenerator(googleGenAI.models, gcConfig);
     }
     throw new Error(
       `Error creating contentGenerator: Unsupported authType: ${config.authType}`,

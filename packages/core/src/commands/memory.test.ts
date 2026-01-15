@@ -26,7 +26,7 @@ describe('memory commands', () => {
   beforeEach(() => {
     mockConfig = {
       getUserMemory: vi.fn(),
-      getDuctTapeMdFileCount: vi.fn(),
+      getGeminiMdFileCount: vi.fn(),
       getGeminiMdFilePaths: vi.fn(),
       isJitContextEnabled: vi.fn(),
       updateSystemInstructionIfInitialized: vi
@@ -44,7 +44,7 @@ describe('memory commands', () => {
       vi.mocked(mockConfig.getUserMemory).mockReturnValue(
         'some memory content',
       );
-      vi.mocked(mockConfig.getDuctTapeMdFileCount).mockReturnValue(1);
+      vi.mocked(mockConfig.getGeminiMdFileCount).mockReturnValue(1);
 
       const result = showMemory(mockConfig);
 
@@ -60,7 +60,7 @@ describe('memory commands', () => {
 
     it('should show a message if memory is empty', () => {
       vi.mocked(mockConfig.getUserMemory).mockReturnValue('');
-      vi.mocked(mockConfig.getDuctTapeMdFileCount).mockReturnValue(0);
+      vi.mocked(mockConfig.getGeminiMdFileCount).mockReturnValue(0);
 
       const result = showMemory(mockConfig);
 

@@ -1,6 +1,6 @@
 /**
  * DuctTape CLI - ASCII Art
- * Forked from Gemini CLI, rebranded for Mistral
+ * A roll of duct tape for the CLI header
  */
 
 export const shortAsciiLogo = `
@@ -31,7 +31,23 @@ export const tinyAsciiLogo = `
   ╰────╯
 `;
 
-// IDE versions (same for now)
+// IDE versions (inverted for light backgrounds)
 export const shortAsciiLogoIde = shortAsciiLogo;
 export const longAsciiLogoIde = longAsciiLogo;
 export const tinyAsciiLogoIde = tinyAsciiLogo;
+
+// Duct tape roll animation frames for loading
+export const tapeRollFrames = [
+  `╭──╮
+│░░│
+╰──╯`,
+  `╭──╮
+│▒▒│
+╰──╯`,
+  `╭──╮
+│▓▓│
+╰──╯`,
+  `╭──╮
+│██│
+╰──╯`,
+];

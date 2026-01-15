@@ -1,5 +1,5 @@
 {
-  "name": "@ducttape/cli-a2a-server",
+  "name": "@google/gemini-cli-a2a-server",
   "version": "0.26.0-nightly.20260115.6cb3ae4e0",
   "description": "Gemini CLI A2A Server",
   "repository": {

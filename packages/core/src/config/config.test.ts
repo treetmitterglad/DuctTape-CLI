@@ -2023,7 +2023,7 @@ describe('Config JIT Initialization', () => {
     );
 
     // Verify state update (delegated to ContextManager)
-    expect(config.getDuctTapeMdFileCount()).toBe(1);
+    expect(config.getGeminiMdFileCount()).toBe(1);
     expect(config.getGeminiMdFilePaths()).toEqual(['/path/to/GEMINI.md']);
   });
 

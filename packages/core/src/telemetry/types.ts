@@ -79,9 +79,11 @@ export class StartSessionEvent implements BaseTelemetryEvent {
     const mcpServers =
       config.getMcpClientManager()?.getMcpServers() ?? config.getMcpServers();
 
-    let useMistral = false;
+    let useGemini = false;
+    let useVertex = false;
     if (generatorConfig && generatorConfig.authType) {
-      useMistral = generatorConfig.authType === AuthType.USE_MISTRAL;
+      useGemini = generatorConfig.authType === AuthType.USE_GEMINI;
+      useVertex = generatorConfig.authType === AuthType.USE_VERTEX_AI;
     }
 
     this['event.name'] = 'cli_config';
@@ -92,8 +94,8 @@ export class StartSessionEvent implements BaseTelemetryEvent {
       typeof config.getSandbox() === 'string' || !!config.getSandbox();
     this.core_tools_enabled = (config.getCoreTools() ?? []).join(',');
     this.approval_mode = config.getApprovalMode();
-    this.api_key_enabled = useMistral;
-    this.mistral_enabled = useMistral;
+    this.api_key_enabled = useGemini || useVertex;
+    this.vertex_ai_enabled = useVertex;
     this.debug_enabled = config.getDebugMode();
     this.mcp_servers = mcpServers ? Object.keys(mcpServers).join(',') : '';
     this.telemetry_enabled = config.getTelemetryEnabled();
@@ -128,7 +130,7 @@ export class StartSessionEvent implements BaseTelemetryEvent {
       core_tools_enabled: this.core_tools_enabled,
       approval_mode: this.approval_mode,
       api_key_enabled: this.api_key_enabled,
-      mistral_enabled: this.mistral_enabled,
+      vertex_ai_enabled: this.vertex_ai_enabled,
       log_user_prompts_enabled: this.telemetry_log_user_prompts_enabled,
       file_filtering_respect_git_ignore: this.file_filtering_respect_git_ignore,
       debug_mode: this.debug_enabled,

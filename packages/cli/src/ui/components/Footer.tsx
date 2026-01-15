@@ -122,7 +122,7 @@ export const Footer: React.FC = () => {
           ) : process.env['SANDBOX'] &&
             process.env['SANDBOX'] !== 'sandbox-exec' ? (
             <Text color="green">
-              {process.env['SANDBOX'].replace(/^ducttape-(?:cli-)?/, '')}
+              {process.env['SANDBOX'].replace(/^gemini-(?:cli-)?/, '')}
             </Text>
           ) : process.env['SANDBOX'] === 'sandbox-exec' ? (
             <Text color={theme.status.warning}>
@@ -142,7 +142,7 @@ export const Footer: React.FC = () => {
         </Box>
       )}
 
-      {/* Right Section: DuctTape Label and Console Summary */}
+      {/* Right Section: Gemini Label and Console Summary */}
       {!hideModelInfo && (
         <Box alignItems="center" justifyContent="flex-end">
           <Box alignItems="center">

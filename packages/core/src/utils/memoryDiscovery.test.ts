@@ -934,7 +934,7 @@ included directory memory
     coreEvents.on(CoreEvent.MemoryChanged, mockEventListener);
     const refreshResult = await refreshServerHierarchicalMemory(config);
     expect(refreshResult.fileCount).equals(1);
-    expect(config.getDuctTapeMdFileCount()).equals(refreshResult.fileCount);
+    expect(config.getGeminiMdFileCount()).equals(refreshResult.fileCount);
     expect(refreshResult.memoryContent).toContain(
       'Really cool custom context!',
     );

@@ -67,9 +67,14 @@ export function AuthDialog({
           ]
         : []),
     {
-      label: 'Use Mistral API Key',
-      value: AuthType.USE_MISTRAL,
-      key: AuthType.USE_MISTRAL,
+      label: 'Use Gemini API Key',
+      value: AuthType.USE_GEMINI,
+      key: AuthType.USE_GEMINI,
+    },
+    {
+      label: 'Vertex AI',
+      value: AuthType.USE_VERTEX_AI,
+      key: AuthType.USE_VERTEX_AI,
     },
   ];
 
@@ -80,7 +85,7 @@ export function AuthDialog({
   }
 
   let defaultAuthType = null;
-  const defaultAuthTypeEnv = process.env['DUCTTAPE_DEFAULT_AUTH_TYPE'];
+  const defaultAuthTypeEnv = process.env['GEMINI_DEFAULT_AUTH_TYPE'];
   if (
     defaultAuthTypeEnv &&
     Object.values(AuthType).includes(defaultAuthTypeEnv as AuthType)
@@ -97,8 +102,8 @@ export function AuthDialog({
       return item.value === defaultAuthType;
     }
 
-    if (process.env['MISTRAL_API_KEY']) {
-      return item.value === AuthType.USE_MISTRAL;
+    if (process.env['GEMINI_API_KEY']) {
+      return item.value === AuthType.USE_GEMINI;
     }
 
     return item.value === AuthType.LOGIN_WITH_GOOGLE;

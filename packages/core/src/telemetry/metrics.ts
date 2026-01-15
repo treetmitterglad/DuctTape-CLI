@@ -499,7 +499,6 @@ export enum GenAiOperationName {
 export enum GenAiProviderName {
   GCP_GEN_AI = 'gcp.gen_ai',
   GCP_VERTEX_AI = 'gcp.vertex_ai',
-  MISTRAL_AI = 'mistral.ai',
 }
 
 export enum GenAiTokenType {
@@ -912,12 +911,11 @@ export function getConventionAttributes(event: {
  */
 function getGenAiProvider(authType?: string): GenAiProviderName {
   switch (authType) {
-    case AuthType.USE_MISTRAL:
-      return GenAiProviderName.MISTRAL_AI;
+    case AuthType.USE_VERTEX_AI:
     case AuthType.COMPUTE_ADC:
     case AuthType.LOGIN_WITH_GOOGLE:
+      return GenAiProviderName.GCP_VERTEX_AI;
     case AuthType.USE_GEMINI:
-    case AuthType.USE_VERTEX_AI:
     default:
       return GenAiProviderName.GCP_GEN_AI;
   }

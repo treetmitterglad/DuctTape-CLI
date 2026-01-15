@@ -103,11 +103,11 @@ export function ApiAuthDialog({
       width="100%"
     >
       <Text bold color={theme.text.primary}>
-        Enter Mistral API Key
+        Enter Gemini API Key
       </Text>
       <Box marginTop={1} flexDirection="column">
         <Text color={theme.text.primary}>
-          Please enter your Mistral API key. It will be securely stored in your
+          Please enter your Gemini API key. It will be securely stored in your
           system keychain.
         </Text>
         <Text color={theme.text.secondary}>

@@ -12,7 +12,7 @@ import { useTerminalSize } from '../hooks/useTerminalSize.js';
 import { isNarrowWidth } from '../utils/isNarrowWidth.js';
 
 interface ContextSummaryDisplayProps {
-  ductTapeMdFileCount: number;
+  geminiMdFileCount: number;
   contextFileNames: string[];
   mcpServers?: Record<string, MCPServerConfig>;
   blockedMcpServers?: Array<{ name: string; extensionName: string }>;
@@ -21,7 +21,7 @@ interface ContextSummaryDisplayProps {
 }
 
 export const ContextSummaryDisplay: React.FC<ContextSummaryDisplayProps> = ({
-  ductTapeMdFileCount,
+  geminiMdFileCount,
   contextFileNames,
   mcpServers,
   blockedMcpServers,
@@ -35,7 +35,7 @@ export const ContextSummaryDisplay: React.FC<ContextSummaryDisplayProps> = ({
   const openFileCount = ideContext?.workspaceState?.openFiles?.length ?? 0;
 
   if (
-    ductTapeMdFileCount === 0 &&
+    geminiMdFileCount === 0 &&
     mcpServerCount === 0 &&
     blockedMcpServerCount === 0 &&
     openFileCount === 0 &&
@@ -53,14 +53,14 @@ export const ContextSummaryDisplay: React.FC<ContextSummaryDisplayProps> = ({
     } (ctrl+g to view)`;
   })();
 
-  const ductTapeMdText = (() => {
-    if (ductTapeMdFileCount === 0) {
+  const geminiMdText = (() => {
+    if (geminiMdFileCount === 0) {
       return '';
     }
     const allNamesTheSame = new Set(contextFileNames).size < 2;
     const name = allNamesTheSame ? contextFileNames[0] : 'context';
-    return `${ductTapeMdFileCount} ${name} file${
-      ductTapeMdFileCount > 1 ? 's' : ''
+    return `${geminiMdFileCount} ${name} file${
+      geminiMdFileCount > 1 ? 's' : ''
     }`;
   })();
 
@@ -93,7 +93,7 @@ export const ContextSummaryDisplay: React.FC<ContextSummaryDisplayProps> = ({
     return `${skillCount} skill${skillCount > 1 ? 's' : ''}`;
   })();
 
-  const summaryParts = [openFilesText, ductTapeMdText, mcpText, skillText].filter(
+  const summaryParts = [openFilesText, geminiMdText, mcpText, skillText].filter(
     Boolean,
   );
 

@@ -92,8 +92,8 @@ export class LoggingContentGenerator implements ContentGenerator {
 
     const genConfig = this.config.getContentGeneratorConfig();
 
-    // Case 2: Using an API key for Mistral.
-    if (genConfig?.mistral) {
+    // Case 2: Using an API key for Vertex AI.
+    if (genConfig?.vertexai) {
       const location = process.env['GOOGLE_CLOUD_LOCATION'];
       if (location) {
         return { address: `${location}-aiplatform.googleapis.com`, port: 443 };

@@ -206,7 +206,7 @@ describe('editCorrector', () => {
         setUserMemory: vi.fn((mem: string) => {
           configParams.userMemory = mem;
         }),
-        getDuctTapeMdFileCount: vi.fn(() => configParams.geminiMdFileCount),
+        getGeminiMdFileCount: vi.fn(() => configParams.geminiMdFileCount),
         setGeminiMdFileCount: vi.fn((count: number) => {
           configParams.geminiMdFileCount = count;
         }),

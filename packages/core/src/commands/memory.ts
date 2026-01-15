@@ -10,7 +10,7 @@ import type { MessageActionReturn, ToolActionReturn } from './types.js';
 
 export function showMemory(config: Config): MessageActionReturn {
   const memoryContent = config.getUserMemory() || '';
-  const fileCount = config.getDuctTapeMdFileCount() || 0;
+  const fileCount = config.getGeminiMdFileCount() || 0;
   let content: string;
 
   if (memoryContent.length > 0) {
@@ -52,7 +52,7 @@ export async function refreshMemory(
   if (config.isJitContextEnabled()) {
     await config.getContextManager()?.refresh();
     memoryContent = config.getUserMemory();
-    fileCount = config.getDuctTapeMdFileCount();
+    fileCount = config.getGeminiMdFileCount();
   } else {
     const result = await refreshServerHierarchicalMemory(config);
     memoryContent = result.memoryContent;

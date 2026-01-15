@@ -136,7 +136,7 @@ export class InitCommand implements Command {
 
     const geminiMdPath = path.join(
       process.env['CODER_AGENT_WORKSPACE_PATH']!,
-      'DUCTTAPE.md',
+      'GEMINI.md',
     );
     const result = performInit(fs.existsSync(geminiMdPath));
 

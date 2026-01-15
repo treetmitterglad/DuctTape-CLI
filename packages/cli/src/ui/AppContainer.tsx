@@ -552,7 +552,7 @@ export const AppContainer = (props: AppContainerProps) => {
           await runExitCleanup();
           writeToStdout(`
 ----------------------------------------------------------------
-Logging in with Google... Restarting DuctTape CLI to continue.
+Logging in with Google... Restarting Gemini CLI to continue.
 ----------------------------------------------------------------
           `);
           process.exit(RELAUNCH_EXIT_CODE);
@@ -1476,12 +1476,12 @@ Logging in with Google... Restarting DuctTape CLI to continue.
     [pendingSlashCommandHistoryItems, pendingGeminiHistoryItems],
   );
 
-  const [ductTapeMdFileCount, setDuctTapeMdFileCount] = useState<number>(
-    config.getDuctTapeMdFileCount(),
+  const [geminiMdFileCount, setGeminiMdFileCount] = useState<number>(
+    config.getGeminiMdFileCount(),
   );
   useEffect(() => {
     const handleMemoryChanged = (result: MemoryChangedPayload) => {
-      setDuctTapeMdFileCount(result.fileCount);
+      setGeminiMdFileCount(result.fileCount);
     };
     coreEvents.on(CoreEvent.MemoryChanged, handleMemoryChanged);
     return () => {
@@ -1508,7 +1508,7 @@ Logging in with Google... Restarting DuctTape CLI to continue.
           authType === AuthType.USE_VERTEX_AI
         ) {
           setDefaultBannerText(
-            'Mistral latest models are now available. \nEnable "Preview features" in /settings. \nLearn more about Mistral AI models',
+            'Gemini 3 Flash and Pro are now available. \nEnable "Preview features" in /settings. \nLearn more at https://goo.gle/enable-preview-features',
           );
         }
       }
